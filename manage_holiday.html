@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Sheet</title>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/axios@0.2.1/dist/axios.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -14,8 +14,8 @@
     <link rel="stylesheet" href="https://final7.herokuapp.com/info/css2">
 </head>
 
-<body>
-    
+<body id="bdy">
+
     <div id="App">
         <nav class="navbar navbar-dark bg-primary">
             <div style="padding: 10px;">
@@ -25,12 +25,12 @@
                 <a href="https://final7.herokuapp.com/login/logout">
                     <button v-on:click="logout()" type="button" class="btn btn-danger">LOGOUT</button>
                 </a>
-                <input class="inp-block" class="inputi form-control" type="text" v-model="x" >
+                <input class="inp-block" class="inputi form-control" type="text" v-model="x">
             </div>
         </nav><br>
         <div>TYPE TO SEARCH </div>
-        <input type="text" id="border" v-model="query"  placeholder="Enter Anything to Search"
-            class="form-control" id="usr"></input></td>
+        <input type="text" id="border" v-model="query" placeholder="Enter Anything to Search" class="form-control"
+            id="usr"></input></td>
         <br>
         <div v-if="error" class="error">
             {{message_error}} !
@@ -45,8 +45,13 @@
                 </th>
 
             </tr>
-            <tr @click="modal(gridData[i-1]['des'],gridData[i-1]['code'])" v-if="gridData[i-1]['name'].toLowerCase().includes(query.toLowerCase())" v-for="i in length">
-                <td v-for="j in head2" v-if="j!='actions'"><div v-if="j!='amount' && j!='m_amount'">{{(gridData[i-1])[j].toLocaleString('en-IN')}}</div><div v-if="j=='amount' || j=='m_amount'">{{parseInt((gridData[i-1])[j]).toLocaleString('en-IN')}}</div></td>
+            <tr @click="modal(gridData[i-1]['des'],gridData[i-1]['code'])"
+                v-if="gridData[i-1]['name'].toLowerCase().includes(query.toLowerCase())" v-for="i in length">
+                <td v-for="j in head2" v-if="j!='actions'">
+                    <div v-if="j!='amount' && j!='m_amount'">{{(gridData[i-1])[j].toLocaleString('en-IN')}}</div>
+                    <div v-if="j=='amount' || j=='m_amount'">{{parseInt((gridData[i-1])[j]).toLocaleString('en-IN')}}
+                    </div>
+                </td>
                 <td><button @click="edit(gridData[i-1]['id'])" class="btn btn-success"><i class="fa fa-pencil-square"
                             style="color:white" aria-hidden="true"></i>&nbsp
                         Edit</button>
@@ -55,14 +60,16 @@
                         Delete</button></td>
             </tr>
 
-           
+
         </table>
         <div id="myModal" ref="modal" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <div style="max-width: 90%;margin-left: auto;margin-right: auto;" >
-                    <b style="color: rgb(108, 81, 206);">Description<b><br><textarea rows="5" cols="100" v-model="text1" readonly></textarea>
-                        <br><br><b style="color: rgb(108, 81, 206);">Code</b><br><textarea rows="20" cols="100" v-model="text2" readonly></textarea>
+                <div style="max-width: 90%;margin-left: auto;margin-right: auto;">
+                    <b style="color: rgb(108, 81, 206);">Description<b><br><textarea rows="5" cols="100" v-model="text1"
+                                readonly></textarea>
+                            <br><br><b style="color: rgb(108, 81, 206);">Code</b><br><textarea rows="20" cols="100"
+                                v-model="text2" readonly></textarea>
                 </div>
             </div>
         </div>
@@ -72,7 +79,7 @@
         Total = {{length}}
 
     </div>
-    
+
 
     <script>
         var app = new Vue({
@@ -81,19 +88,19 @@
                 query: '',
                 field: 'name', clicks: 0, length: 2,
                 head: [
-                    'ID' , "Name" ,"Date" ,"Topic" ,"Source" ,"Actions"
+                    'ID', "Name", "Date", "Topic", "Source", "Actions"
                 ],
-                head2: ['id', 'name', 'date','topic',"source" ,'actions'],
+                head2: ['id', 'name', 'date', 'topic', "source", 'actions'],
                 total1: 0, total2: 0,
                 success: 0,
                 error: 0,
-                x:'',
-                text1:"Nothing to show",
-                text2:"Nothing to Show",
+                x: '',
+                text1: "Nothing to show",
+                text2: "Nothing to Show",
                 message_error: "Dont leave empty response",
                 message_success: "Message !",
                 gridData: [],
-                
+
 
 
             },
@@ -108,7 +115,7 @@
                             app.gridData = Response
 
                             app.length = Response.length;
-                            
+
                             app.sort('id');
 
                         })
@@ -119,7 +126,7 @@
                         })
 
 
-                },submit() {
+                }, submit() {
                     console.log(this.gridData.length)
                     for (let i = 0; i < this.gridData.length; i++) {
                         this.gridData[i].Half = this.gridData[i]['Age'] / 2
@@ -127,7 +134,7 @@
                 }, sort(field) {
                     this.clicks++
                     this.field = app.head2[app.head.indexOf(field)]
-                    field=this.field
+                    field = this.field
                     if (field == 'date' || field == 'm_date') {
                         this.gridData.sort(this.compareA)
                     } else {
@@ -145,7 +152,7 @@
                     var nameA = a[this.field]
                     var nameB = b[this.field]
 
-                    if (this.field == 'id' || this.field=='amount' || this.field=="m_amount") {
+                    if (this.field == 'id' || this.field == 'amount' || this.field == "m_amount") {
                         var nameA = parseInt(a[this.field])
                         var nameB = parseInt(b[this.field])
                     }
@@ -162,7 +169,7 @@
                     var nameB = b[this.field]
                     nameA = parseInt(nameA.slice(6, 10) + nameA.slice(3, 5) + nameA.slice(0, 2))
                     nameB = parseInt(nameB.slice(6, 10) + nameB.slice(3, 5) + nameB.slice(0, 2))
-                    
+
                     if (nameA < nameB) {
                         return -1;
                     }
@@ -176,7 +183,7 @@
                     $.post('./delete?id=' + date, {
                     }, function (data) {
                         console.log(data.message)
-                        var log=app
+                        var log = app
                         if (data.message != 'true') {
                             log.error = 1
                             log.message_error = data.message
@@ -192,18 +199,18 @@
                     })
                 }, edit(idx) {
                     window.location.href = "edit_entry?id=" + idx;
-                },modal(t1,t2){
+                }, modal(t1, t2) {
                     var app = this;
                     var btn = app.$refs.modal
                     btn.style.display = "block"
-                    app.text1=t1;
-                    app.text2=t2;
+                    app.text1 = t1;
+                    app.text2 = t2;
                 }
 
 
             }
         })
-           
+
         function exportTableToExcel(tableID, filename = '') {
             var downloadLink;
             var dataType = 'application/vnd.ms-excel';
@@ -234,21 +241,23 @@
                 downloadLink.click();
             }
         }
-        setTimeout(function(){
+        setTimeout(function () {
             var modal = document.getElementById("myModal");
-        var span = document.getElementsByClassName("close")[0];
-        
-        span.onclick = function () {
-            modal.style.display = "none";
-        }
-        // When the user clicks anywhere outside of the modal, close it
-        window.onclick = function (event) {
-            if (event.target == modal) {
+            var span = document.getElementsByClassName("close")[0];
+
+            span.onclick = function () {
                 modal.style.display = "none";
             }
-        } 
-        },2000)
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+            
+        }, 2000)
         
+
 
     </script>
 </body>
