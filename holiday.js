@@ -15,6 +15,9 @@ route.get('/css', (req, res) => {
   res.sendFile(path.join(__dirname, './holiday.css'))
 })
 route.get('/css2', (req, res) => {
+  res.sendFile(path.join(__dirname, './abc.css'))
+})
+route.get('/css2', (req, res) => {
   res.sendFile(path.join(__dirname, './main.css'))
 })
 route.get('/api/holiday',  (req, res) => {

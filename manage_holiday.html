@@ -11,66 +11,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://final7.herokuapp.com/info/css2">
 </head>
 
 <body>
-    <style>
-        table {
-
-            font-family: arial, sans-serif;
-
-            width: 100%;
-            font-size: 16px;
-            border: 2px solid rgb(238, 97, 31);
-            border-radius: 3px;
-            background-color: #fff;
-        }
-
-        th {
-            background-color: rgb(240, 77, 104);
-            color: rgba(255, 255, 255, 0.66);
-        }
-
-        td,
-        th {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 10px;
-        }
-
-        tr:nth-child(even) {
-            background-color: #dddddd;
-        }
-
-        tr:hover {
-            background-color: #9abdf5;
-        }
-
-        #arrow {
-            display: inline-block;
-            vertical-align: middle;
-            width: 0;
-            height: 0;
-            margin-left: 5px;
-            opacity: 0.66;
-        }
-
-        .arrowasc {
-            border-left: 4px solid transparent;
-            border-right: 4px solid transparent;
-            border-bottom: 4px solid #fff;
-        }
-
-        .arrowdsc {
-            border-left: 4px solid transparent;
-            border-right: 4px solid transparent;
-            border-top: 4px solid #fff;
-        }
-
-        #border {
-            background-color: #dddddd;
-        }
-    </style>
+    
     <div id="App">
         <nav class="navbar navbar-dark bg-primary">
             <div style="padding: 10px;">
@@ -100,7 +45,7 @@
                 </th>
 
             </tr>
-            <tr v-if="gridData[i-1]['name'].toLowerCase().includes(query.toLowerCase())" v-for="i in length">
+            <tr @click="modal(gridData[i-1]['des'],gridData[i-1]['code'])" v-if="gridData[i-1]['name'].toLowerCase().includes(query.toLowerCase())" v-for="i in length">
                 <td v-for="j in head2" v-if="j!='actions'"><div v-if="j!='amount' && j!='m_amount'">{{(gridData[i-1])[j].toLocaleString('en-IN')}}</div><div v-if="j=='amount' || j=='m_amount'">{{parseInt((gridData[i-1])[j]).toLocaleString('en-IN')}}</div></td>
                 <td><button @click="edit(gridData[i-1]['id'])" class="btn btn-success"><i class="fa fa-pencil-square"
                             style="color:white" aria-hidden="true"></i>&nbsp
@@ -112,12 +57,22 @@
 
            
         </table>
+        <div id="myModal" ref="modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div style="max-width: 90%;margin-left: auto;margin-right: auto;" >
+                    <b style="color: rgb(108, 81, 206);">Description<b><br><textarea rows="5" cols="100" v-model="text1" readonly></textarea>
+                        <br><br><b style="color: rgb(108, 81, 206);">Code</b><br><textarea rows="20" cols="100" v-model="text2" readonly></textarea>
+                </div>
+            </div>
+        </div>
         <button v-on:click="submit" type="button" class="btn btn-info">Submit</button>
 
         <button onclick="exportTableToExcel('tblData')">Export Table Data To Excel File</button><br>
         Total = {{length}}
 
     </div>
+    
 
     <script>
         var app = new Vue({
@@ -133,6 +88,8 @@
                 success: 0,
                 error: 0,
                 x:'',
+                text1:"Nothing to show",
+                text2:"Nothing to Show",
                 message_error: "Dont leave empty response",
                 message_success: "Message !",
                 gridData: [],
@@ -235,11 +192,18 @@
                     })
                 }, edit(idx) {
                     window.location.href = "edit_entry?id=" + idx;
-                },
+                },modal(t1,t2){
+                    var app = this;
+                    var btn = app.$refs.modal
+                    btn.style.display = "block"
+                    app.text1=t1;
+                    app.text2=t2;
+                }
 
 
             }
         })
+           
         function exportTableToExcel(tableID, filename = '') {
             var downloadLink;
             var dataType = 'application/vnd.ms-excel';
@@ -270,6 +234,21 @@
                 downloadLink.click();
             }
         }
+        setTimeout(function(){
+            var modal = document.getElementById("myModal");
+        var span = document.getElementsByClassName("close")[0];
+        
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        } 
+        },2000)
+        
 
     </script>
 </body>
