@@ -20,7 +20,7 @@ app.use('/info', require('./holiday'));
 
 
 app.listen(SERVER_PORT, function () {
-    console.log("Server started on http://localhost:3420/");
+    console.log("Server started on https://final7.herokuapp.com/");
 });
 
 //initialoze passport

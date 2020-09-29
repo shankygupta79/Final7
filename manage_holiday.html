@@ -74,10 +74,10 @@
     <div id="App">
         <nav class="navbar navbar-dark bg-primary">
             <div style="padding: 10px;">
-                <a href="http://localhost:3420/info/add_entry">
+                <a href="https://final7.herokuapp.com/info/add_entry">
                     <button v-on:click="logout()" type="button" class="btn btn-info">Add New</button>
                 </a>
-                <a href="http://localhost:3420/login/logout">
+                <a href="https://final7.herokuapp.com/login/logout">
                     <button v-on:click="logout()" type="button" class="btn btn-danger">LOGOUT</button>
                 </a>
                 <input class="inp-block" class="inputi form-control" type="text" v-model="x" >
@@ -146,7 +146,7 @@
             methods: {
                 load: function () {
                     var log = this;
-                    axios.get('http://localhost:3420/info/api/holiday')
+                    axios.get('https://final7.herokuapp.com/info/api/holiday')
                         .then(function (Response) {
                             app.gridData = Response
 

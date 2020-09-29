@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
         integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <!-- Our Custom CSS -->
-    <link rel="stylesheet" href="http://localhost:3420/info/css">
+    <link rel="stylesheet" href="https://final7.herokuapp.com/info/css">
     <style>
         .field {
             font-weight: bold;
@@ -37,9 +37,9 @@
 
             <nav class="navbar navbar-dark bg-primary">
                 <div style="padding: 10px;">
-                    <!-- Navbar content --><a href="http://localhost:3420/info/manage_entry">
+                    <!-- Navbar content --><a href="https://final7.herokuapp.com/info/manage_entry">
                         <button v-on:click="logout()" type="button" class="btn btn-info">Manage</button>
-                    </a><a href="http://localhost:3420/login/logout">
+                    </a><a href="https://final7.herokuapp.com/login/logout">
                         <button v-on:click="logout()" type="button" class="btn btn-danger">LOGOUT</button>
                     </a></div>
             </nav>
@@ -120,7 +120,7 @@
                 load: function () {
                     var params = this.getParams(window.location.href)
 
-                    axios.get('http://localhost:3420/info/api/holiday?id=' + params.id)
+                    axios.get('https://final7.herokuapp.com/info/api/holiday?id=' + params.id)
                         .then(function (Response1) {
                             console.log(Response1)
                             log.id = Response1.id
