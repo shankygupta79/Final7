@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sheet</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios@0.2.1/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+</head>
+
+<body>
+    <style>
+        table {
+
+            font-family: arial, sans-serif;
+
+            width: 100%;
+            font-size: 16px;
+            border: 2px solid rgb(238, 97, 31);
+            border-radius: 3px;
+            background-color: #fff;
+        }
+
+        th {
+            background-color: rgb(240, 77, 104);
+            color: rgba(255, 255, 255, 0.66);
+        }
+
+        td,
+        th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 10px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+
+        tr:hover {
+            background-color: #9abdf5;
+        }
+
+        #arrow {
+            display: inline-block;
+            vertical-align: middle;
+            width: 0;
+            height: 0;
+            margin-left: 5px;
+            opacity: 0.66;
+        }
+
+        .arrowasc {
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-bottom: 4px solid #fff;
+        }
+
+        .arrowdsc {
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid #fff;
+        }
+
+        #border {
+            background-color: #dddddd;
+        }
+    </style>
+    <div id="App">
+        <nav class="navbar navbar-dark bg-primary">
+            <div style="padding: 10px;">
+                <a href="http://localhost:3420/info/add_entry">
+                    <button v-on:click="logout()" type="button" class="btn btn-info">Add New</button>
+                </a>
+                <a href="http://localhost:3420/login/logout">
+                    <button v-on:click="logout()" type="button" class="btn btn-danger">LOGOUT</button>
+                </a>
+                <input class="inp-block" class="inputi form-control" type="text" v-model="x" >
+            </div>
+        </nav><br>
+        <div>TYPE TO SEARCH </div>
+        <input type="text" id="border" v-model="query"  placeholder="Enter Anything to Search"
+            class="form-control" id="usr"></input></td>
+        <br>
+        <div v-if="error" class="error">
+            {{message_error}} !
+        </div> <br>
+        <div v-if="success" class="success">
+            {{message_success}} !<br>
+        </div>
+        <table id='tblData' v-if="x==1">
+            <tr>
+                <th v-for="i in head">{{i}}
+                    <b @click="sort(i)"><span :class="clicks%2==0 ? 'arrowasc' : 'arrowdsc'" id="arrow"></span></b>
+                </th>
+
+            </tr>
+            <tr v-if="gridData[i-1]['name'].toLowerCase().includes(query.toLowerCase())" v-for="i in length">
+                <td v-for="j in head2" v-if="j!='actions'"><div v-if="j!='amount' && j!='m_amount'">{{(gridData[i-1])[j].toLocaleString('en-IN')}}</div><div v-if="j=='amount' || j=='m_amount'">{{parseInt((gridData[i-1])[j]).toLocaleString('en-IN')}}</div></td>
+                <td><button @click="edit(gridData[i-1]['id'])" class="btn btn-success"><i class="fa fa-pencil-square"
+                            style="color:white" aria-hidden="true"></i>&nbsp
+                        Edit</button>
+                    <button @click="deletey(gridData[i-1]['id'])" class="btn btn-danger"><i class="fa fa-times"
+                            style="color:white" aria-hidden="true"></i>&nbsp
+                        Delete</button></td>
+            </tr>
+
+           
+        </table>
+        <button v-on:click="submit" type="button" class="btn btn-info">Submit</button>
+
+        <button onclick="exportTableToExcel('tblData')">Export Table Data To Excel File</button><br>
+        Total = {{length}}
+
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: "#App",
+            data: {
+                query: '',
+                field: 'name', clicks: 0, length: 2,
+                head: [
+                    'ID' , "Name" ,"Date" ,"Topic" ,"Source" ,"Actions"
+                ],
+                head2: ['id', 'name', 'date','topic',"source" ,'actions'],
+                total1: 0, total2: 0,
+                success: 0,
+                error: 0,
+                x:'',
+                message_error: "Dont leave empty response",
+                message_success: "Message !",
+                gridData: [],
+                
+
+
+            },
+            created: function () {
+                this.load();
+            },
+            methods: {
+                load: function () {
+                    var log = this;
+                    axios.get('http://localhost:3420/info/api/holiday')
+                        .then(function (Response) {
+                            app.gridData = Response
+
+                            app.length = Response.length;
+                            
+                            app.sort('id');
+
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                            app.error = 1
+                            app.message_error = "Error connecting the database try again later !"
+                        })
+
+
+                },submit() {
+                    console.log(this.gridData.length)
+                    for (let i = 0; i < this.gridData.length; i++) {
+                        this.gridData[i].Half = this.gridData[i]['Age'] / 2
+                    }
+                }, sort(field) {
+                    this.clicks++
+                    this.field = app.head2[app.head.indexOf(field)]
+                    field=this.field
+                    if (field == 'date' || field == 'm_date') {
+                        this.gridData.sort(this.compareA)
+                    } else {
+                        this.gridData.sort(this.compare)
+                    }
+                    if (this.clicks % 2 == 0) {
+                        if (field == 'date' || field == 'm_date') {
+                            this.gridData.reverse(this.compareA)
+                        } else {
+                            this.gridData.reverse(this.compare)
+                        }
+                    }
+                },
+                compare(a, b) {
+                    var nameA = a[this.field]
+                    var nameB = b[this.field]
+
+                    if (this.field == 'id' || this.field=='amount' || this.field=="m_amount") {
+                        var nameA = parseInt(a[this.field])
+                        var nameB = parseInt(b[this.field])
+                    }
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+                    return 0;
+                },
+                compareA(a, b) {
+                    var nameA = a[this.field]
+                    var nameB = b[this.field]
+                    nameA = parseInt(nameA.slice(6, 10) + nameA.slice(3, 5) + nameA.slice(0, 2))
+                    nameB = parseInt(nameB.slice(6, 10) + nameB.slice(3, 5) + nameB.slice(0, 2))
+                    
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+                    return 0;
+                }, logout() {
+
+                }, deletey(date) {
+                    $.post('./delete?id=' + date, {
+                    }, function (data) {
+                        console.log(data.message)
+                        var log=app
+                        if (data.message != 'true') {
+                            log.error = 1
+                            log.message_error = data.message
+
+                        } else {
+                            log.error = 0
+                            log.success = 1
+                            log.message_success = "Entry Deleted SuccessFully !"
+                            setTimeout(() => {
+                                window.location.href = "manage_entry"
+                            }, 1000);
+                        }
+                    })
+                }, edit(idx) {
+                    window.location.href = "edit_entry?id=" + idx;
+                },
+
+
+            }
+        })
+        function exportTableToExcel(tableID, filename = '') {
+            var downloadLink;
+            var dataType = 'application/vnd.ms-excel';
+            var tableSelect = document.getElementById(tableID);
+            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+
+            // Specify file name
+            filename = filename ? filename + '.xls' : 'excel_data.xls';
+
+            // Create download link element
+            downloadLink = document.createElement("a");
+
+            document.body.appendChild(downloadLink);
+
+            if (navigator.msSaveOrOpenBlob) {
+                var blob = new Blob(['\ufeff', tableHTML], {
+                    type: dataType
+                });
+                navigator.msSaveOrOpenBlob(blob, filename);
+            } else {
+                // Create a link to the file
+                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+                // Setting the file name
+                downloadLink.download = filename;
+
+                //triggering the function
+                downloadLink.click();
+            }
+        }
+
+    </script>
+</body>
+
+</html>
