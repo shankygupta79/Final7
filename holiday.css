@@ -135,27 +135,10 @@ tr th i{
     color: ivory;
 }
 body{
-    -webkit-animation: background 5s cubic-bezier(1,0,0,1) infinite;
-  animation: background 10s cubic-bezier(1,0,0,1) infinite; 
-  animation-duration: 10s;
+    background:linear-gradient(100deg, pink, rgb(139, 106, 216));
 }
-@-webkit-keyframes background {
-    0% { background: linear-gradient(0deg, pink, rgb(139, 106, 216));}
-    15% { background: linear-gradient(25deg, pink, rgb(139, 106, 216)); }  
-    33% { background: linear-gradient(45deg, pink, rgb(139, 106, 216)); }  
-    67% { background: linear-gradient(95deg, pink, rgb(139, 106, 216)); }
-    83% { background: linear-gradient(145deg, pink, rgb(139, 106, 216)); }  
-    100% { background: linear-gradient(245deg, pink, rgb(139, 106, 216)); }
-  }
-  
-  @keyframes background {
-    0% { background: linear-gradient(0deg, pink, rgb(139, 106, 216));}
-    15% { background: linear-gradient(25deg, pink, rgb(139, 106, 216)); }  
-    33% { background: linear-gradient(45deg, pink, rgb(139, 106, 216)); }  
-    67% { background: linear-gradient(95deg, pink, rgb(139, 106, 216)); }
-    83% { background: linear-gradient(145deg, pink, rgb(139, 106, 216)); }  
-    100% { background: linear-gradient(245deg, pink, rgb(139, 106, 216)); }
-  }
+
+   
 input, textarea{
     background-color: rgb(24, 22, 22);
     color: white;

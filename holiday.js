@@ -75,7 +75,6 @@ route.post('/add_holpost',  (req, res) => {
 })
 route.post('/edit_holpost',  (req, res) => {
   console.log(req.query.id + " IN EDIT")
-  var password = passwordi
   Table.update({
     name: req.body.name,
     des: req.body.des,
